@@ -1,18 +1,27 @@
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { TreeGridModule } from '@syncfusion/ej2-angular-treegrid';
+import {
+  TreeGridModule,
+  PageService,
+  SortService,
+  FilterService,
+  ToolbarService,
+  EditService,
+} from '@syncfusion/ej2-angular-treegrid';
 
 import { AppComponent } from './app.component';
 
 @NgModule({
-  declarations: [
-    AppComponent
+  declarations: [AppComponent],
+  imports: [BrowserModule, TreeGridModule, FormsModule],
+  providers: [
+    PageService,
+    SortService,
+    FilterService,
+    ToolbarService,
+    EditService,
   ],
-  imports: [
-    BrowserModule,
-    TreeGridModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

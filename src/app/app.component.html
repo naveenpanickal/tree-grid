@@ -1,1 +1,39 @@
-<ejs-treegrid [dataSource] = 'sampleData'></ejs-treegrid>
+<div class="col-lg-9 control-section">
+  <div class="content-wrapper">
+    <ejs-treegrid
+      #tree
+      [dataSource]="sampleData"
+      childMapping="friends"
+      [treeColumnIndex]="1"
+      [allowPaging]="true"
+      [allowSorting]="true"
+      [allowFiltering]="true"
+      [pageSettings]="pageSettings"
+      [sortSettings]="sortSettings"
+      [allowSelection]="true"
+      [selectionSettings]="selectionOption"
+      [editSettings]="editOption"
+      [toolbar]="toolBar"
+    ></ejs-treegrid>
+  </div>
+</div>
+<div class="col-lg-3 property-section">
+  <table id="property" title="Properties" style="width: 100%">
+    <tbody>
+      <tr *ngFor="let item of sortSettings.columns">
+        <td style="width: 70%">
+          <div>{{ item.field }}</div>
+        </td>
+        <td style="width: 30%; padding: 10px 10px 10px 0px">
+          <div class="col-md-6">
+            <input
+              type="checkbox"
+              (change)="setColumnSort($event, item.field || '')"
+              [checked]="sortData.has(item.field)"
+            />
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
