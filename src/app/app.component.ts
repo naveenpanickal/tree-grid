@@ -9,6 +9,12 @@ import {
   ToolbarItems,
 } from '@syncfusion/ej2-treegrid';
 import { TreeData, TreeGridData } from './datasource';
+import {
+  DataManager,
+  WebApiAdaptor,
+  UrlAdaptor,
+  Query,
+} from '@syncfusion/ej2-data';
 
 @Component({
   selector: 'app-root',
@@ -18,7 +24,7 @@ import { TreeData, TreeGridData } from './datasource';
 export class AppComponent implements OnInit {
   title = 'tree-grid';
   @ViewChild('tree') treeGridElement: TreeGridComponent;
-  sampleData: TreeGridData[];
+  sampleData: DataManager;
   public pageSettings: PageSettingsModel;
   public sortSettings: SortSettingsModel;
   public selectionOption: SelectionSettingsModel;
@@ -27,7 +33,7 @@ export class AppComponent implements OnInit {
   toolBar: ToolbarItems[];
 
   ngOnInit() {
-    this.sampleData = TreeData;
+    // this.sampleData = TreeData;
     this.pageSettings = { pageSize: 20 };
     this.sortSettings = {
       columns: [
@@ -37,11 +43,19 @@ export class AppComponent implements OnInit {
         { field: 'email', direction: 'Ascending' },
       ],
     };
+    const a = new DataManager({
+      url: 'http://localhost:3000/add',
+      adaptor: new UrlAdaptor(),
+    });
+    a.executeQuery(new Query().take(8)).then((e: any) => {
+      this.sampleData = e.result;
+      console.log('data====>', e.result);
+    });
 
-    this.selectionOption = { type: 'Multiple' };
-    this.sortSettings.columns?.forEach((column) =>
-      this.sortData.add(column.field)
-    );
+    // this.selectionOption = { type: 'Multiple' };
+    // this.sortSettings.columns?.forEach((column) =>
+    //   this.sortData.add(column.field)
+    // );
     this.editOption = {
       allowAdding: true,
       allowDeleting: true,
@@ -50,6 +64,7 @@ export class AppComponent implements OnInit {
       newRowPosition: 'Below',
       showConfirmDialog: true,
     };
+    this.toolBar = ['Add', 'Edit', 'Update', 'Cancel'];
   }
   setColumnSort(event: any, fieldName: string) {
     if (event.target.checked) {
@@ -63,9 +78,12 @@ export class AppComponent implements OnInit {
     //this.treeGridElement.sortByColumn('company', 'Ascending', true);
     console.log(this.sortSettings);
     console.log(this.treeGridElement);
-    this.toolBar = ['Add', 'Edit', 'Update', 'Cancel'];
   }
-}
-function data(data: any, arg1: (any: any) => void) {
-  throw new Error('Function not implemented.');
+  onChange(event) {
+    console.log(event);
+    console.log(this.sampleData);
+  }
+  onsave(event) {
+    console.log(event);
+  }
 }

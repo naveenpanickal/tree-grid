@@ -1,6 +1,6 @@
 <div class="col-lg-9 control-section">
-  <div class="content-wrapper">
-    <ejs-treegrid
+  <div *ngIf="sampleData" class="content-wrapper">
+    <!-- <ejs-treegrid
       #tree
       [dataSource]="sampleData"
       childMapping="friends"
@@ -10,6 +10,23 @@
       [allowFiltering]="true"
       [pageSettings]="pageSettings"
       [sortSettings]="sortSettings"
+      [allowSelection]="true"
+      [selectionSettings]="selectionOption"
+      [editSettings]="editOption"
+      [toolbar]="toolBar"
+    ></ejs-treegrid> -->
+    <ejs-treegrid
+      #tree
+      (toolbarClick)="onChange($event)"
+      (keydown)="onChange($event)"
+      (keyup)="onChange($event)"
+      [dataSource]="sampleData"
+      childMapping="friends"
+      [treeColumnIndex]="1"
+      [allowPaging]="true"
+      [allowSorting]="true"
+      [allowFiltering]="true"
+      [pageSettings]="pageSettings"
       [allowSelection]="true"
       [selectionSettings]="selectionOption"
       [editSettings]="editOption"
