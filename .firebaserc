@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "tree-grid": {
+      "hosting": {
+        "tree-grid": [
+          "tree-grid"
+        ]
+      }
+    }
+  }
+}
