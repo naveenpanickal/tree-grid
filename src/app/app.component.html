@@ -1,4 +1,4 @@
-<div class="col-lg-9 control-section">
+<!-- <div class="col-lg-8 control-section">
   <div *ngIf="sampleData" class="content-wrapper">
     <!-- <ejs-treegrid
       #tree
@@ -15,26 +15,50 @@
       [editSettings]="editOption"
       [toolbar]="toolBar"
     ></ejs-treegrid> -->
-    <ejs-treegrid
+<!-- <ejs-treegrid
       #tree
       (toolbarClick)="onChange($event)"
-      (keydown)="onChange($event)"
-      (keyup)="onChange($event)"
+      (actionBegin)="actionBegin($event)"
+      (contextMenuOpen)="contextMenuOpen($event)"
+      (contextMenuClick)="contextMenuClick($event)"
+      (actionComplete)="actionComplete($event)"
       [dataSource]="sampleData"
       childMapping="friends"
       [treeColumnIndex]="1"
       [allowPaging]="true"
+      [contextMenuItems]="contextMenuItems"
       [allowSorting]="true"
+      [allowResizing]="true"
       [allowFiltering]="true"
       [pageSettings]="pageSettings"
       [allowSelection]="true"
       [selectionSettings]="selectionOption"
       [editSettings]="editOption"
       [toolbar]="toolBar"
-    ></ejs-treegrid>
+    >
+    </ejs-treegrid>
   </div>
 </div>
-<div class="col-lg-3 property-section">
+<div>
+  <ejs-contextmenu
+    #contextmenu
+    target=".e-content"
+    [items]="menuItems"
+    (select)="select($event)"
+  ></ejs-contextmenu>
+</div>
+
+<div>
+  <ejs-contextmenu
+    #headercontextmenu
+    target=".e-gridheader"
+    [items]="headermenuItems"
+    (beforeOpen)="beforeOpen()"
+    (select)="select($event)"
+  ></ejs-contextmenu>
+</div>
+<div class="col-lg-2 property-section">
+  <h3>sort settings</h3>
   <table id="property" title="Properties" style="width: 100%">
     <tbody>
       <tr *ngFor="let item of sortSettings.columns">
@@ -53,4 +77,216 @@
       </tr>
     </tbody>
   </table>
+  <h3>Display Columns</h3>
+  <table id="property" title="Properties" style="width: 100%">
+    <tbody>
+      <tr *ngFor="let item of sortSettings.columns">
+        <td style="width: 70%">
+          <div>{{ item.field }}</div>
+        </td>
+        <td style="width: 30%; padding: 10px 10px 10px 0px">
+          <div class="col-md-6">
+            <input
+              type="checkbox"
+              (change)="setColumns($event, item.field || '')"
+              [checked]="columnData.has(item.field)"
+            />
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="col-lg-2 property-section">
+  <h3>sort settings</h3>
+  <table id="property" title="Properties" style="width: 100%">
+    <tbody>
+      <tr *ngFor="let item of sortSettings.columns">
+        <td style="width: 70%">
+          <div>{{ item.field }}</div>
+        </td>
+        <td style="width: 30%; padding: 10px 10px 10px 0px">
+          <div class="col-md-6">
+            <input
+              type="checkbox"
+              (change)="setColumnSort($event, item.field || '')"
+              [checked]="sortData.has(item.field)"
+            />
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3>Display Columns</h3>
+  <table id="property" title="Properties" style="width: 100%">
+    <tbody>
+      <tr *ngFor="let item of sortSettings.columns">
+        <td style="width: 70%">
+          <div>{{ item.field }}</div>
+        </td>
+        <td style="width: 30%; padding: 10px 10px 10px 0px">
+          <div class="col-md-6">
+            <input
+              type="checkbox"
+              (change)="setColumnSort($event, item.field || '')"
+              [checked]="sortData.has(item.field)"
+            />
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div> -->
+<div *ngIf="showColumn">
+  <ejs-dialog
+    id="dialog"
+    #ejDialog
+    content=""
+    width="250px"
+    [buttons]="button"
+    width="350px"
+  >
+    <h3>Display Columns</h3>
+    <table id="property" title="Properties" style="width: 100%">
+      <tbody>
+        <tr *ngFor="let item of allColumns">
+          <td style="width: 70%">
+            <div>{{ item }}</div>
+          </td>
+          <td style="width: 30%; padding: 10px 10px 10px 0px">
+            <div class="col-md-6">
+              <input
+                type="checkbox"
+                (change)="setColumns($event, item || '')"
+                [checked]="columnData.has(item)"
+              />
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ejs-dialog>
+</div>
+
+<div *ngIf="data" class="control-section">
+  <div class="content-wrapper">
+    <ejs-treegrid
+      #grid
+      [dataSource]="data"
+      childMapping="friends"
+      [treeColumnIndex]="1"
+      id="gridcomp"
+      allowSorting="true"
+      allowReordering="true"
+      allowRowDragAndDrop="true"
+      [allowTextWrap]="textWrap"
+      [sortSettings]="sortSetting"
+      [contextMenuItems]="contextMenuItems"
+      (contextmenu)="contextMenuOpen($event)"
+      [allowSelection]="true"
+      [selectionSettings]="selectionOption"
+      (actionComplete)="actionComplete($event)"
+      (actionBegin)="actionBegin($event)"
+      [allowFiltering]="enableFilter"
+      [editSettings]="editing"
+      (contextMenuClick)="contextMenuClick($event)"
+    >
+      <e-columns>
+        <e-column
+          *ngFor="let item of columnStyle"
+          [field]="item.field"
+          [headerText]="item.headerText"
+          [customAttributes]="setColumnAttribute(item.field)"
+          [textAlign]="item.textAlign"
+          [minWidth]="item.minWidth"
+          [type]="item.type"
+        ></e-column>
+      </e-columns>
+    </ejs-treegrid>
+  </div>
+</div>
+
+<div *ngIf="enableMultiSort">
+  <ejs-dialog
+    id="dialog"
+    #ejDialog
+    content=""
+    width="250px"
+    [buttons]="button"
+    width="350px"
+  >
+    <h3>sort settings</h3>
+    <table id="property" title="Properties" style="width: 100%">
+      <tbody>
+        <tr *ngFor="let item of allColumns">
+          <td style="width: 70%">
+            <div>{{ item }}</div>
+          </td>
+          <td style="width: 30%; padding: 10px 10px 10px 0px">
+            <div class="col-md-6">
+              <input
+                type="checkbox"
+                (change)="setColumnSort($event, item || '')"
+                [checked]="sortData.has(item)"
+              />
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ejs-dialog>
+</div>
+<div *ngIf="editStyle || addNewColumn">
+  <ejs-dialog
+    id="dialog"
+    content=""
+    [buttons]="styleEditorButtons"
+    width="400px"
+  >
+    <h3>Column styles</h3>
+    <div *ngIf="addNewColumn" class="col-lg-6 control-section">
+      <label>Fieldt:</label>
+      <input type="text" [(ngModel)]="currentColumnStyle.field" />
+    </div>
+    <div class="col-lg-6 control-section">
+      <label>Header Text:</label>
+      <input type="text" [(ngModel)]="currentColumnStyle.headerText" />
+    </div>
+    <div class="col-lg-6 control-section">
+      <label>Text Align:</label>
+      <br />
+      <select [(ngModel)]="currentColumnStyle.textAlign">
+        <option value="Right">Right</option>
+        <option value="Left">Left</option>
+        <option value="Center">Center</option>
+      </select>
+    </div>
+    <div class="col-lg-6 control-section">
+      <label>textSize:</label>
+      <input type="number" [(ngModel)]="currentColumnStyle.textSize" />
+    </div>
+    <div class="col-lg-6 control-section">
+      <label>Text Color:</label>
+      <input type="text" [(ngModel)]="currentColumnStyle.color" />
+    </div>
+    <div class="col-lg-6 control-section">
+      <label>Background Color:</label>
+      <input type="text" [(ngModel)]="currentColumnStyle.background" />
+    </div>
+    <div class="col-lg-6 control-section">
+      <label>Column Type:</label>
+      <br />
+      <select [(ngModel)]="currentColumnStyle.type">
+        <option value="string">string</option>
+        <option value="number">number</option>
+        <option value="boolean">boolean</option>
+        <option value="date">date</option>
+        <option value="datetime">datetime</option>
+      </select>
+    </div>
+    <div class="col-lg-6 control-section">
+      <label>Min Width:</label>
+      <input type="number" [(ngModel)]="currentColumnStyle.minWidth" />
+    </div>
+  </ejs-dialog>
 </div>
